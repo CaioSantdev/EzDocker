@@ -1,0 +1,20 @@
+#!/bin/sh
+# Atalho local: não depende de UV no PATH nem altera o perfil do terminal.
+set -eu
+EZ_ROOT=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
+cd "$EZ_ROOT"
+if ! command -v npm >/dev/null 2>&1 && [ -s "$HOME/.nvm/nvm.sh" ]; then
+    . "$HOME/.nvm/nvm.sh"
+fi
+if [ "$#" -eq 0 ]; then
+    set -- dev
+fi
+if command -v uv >/dev/null 2>&1; then
+    exec uv run ezdocker "$@"
+elif [ -x "$EZ_ROOT/.tools/uv" ]; then
+    export UV_CACHE_DIR="$EZ_ROOT/.uv-cache"
+    exec "$EZ_ROOT/.tools/uv" run ezdocker "$@"
+else
+    echo "UV não encontrado. Instale UV antes de executar o projeto." >&2
+    exit 1
+fi

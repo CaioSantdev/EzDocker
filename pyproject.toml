@@ -1,0 +1,23 @@
+[project]
+name = "ezdocker"
+version = "0.1.0"
+description = "Gerenciador local de Docker e containers"
+readme = "README.md"
+requires-python = ">=3.14"
+dependencies = ["docker>=7.1.0,<8", "fastapi>=0.115,<1", "uvicorn>=0.34,<1"]
+
+[project.scripts]
+ezdocker = "ezdocker.cli:main"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[dependency-groups]
+dev = ["pytest>=8", "ruff>=0.11", "httpx>=0.28,<1"]
+
+[tool.ruff]
+target-version = "py314"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

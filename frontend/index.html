@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#111820" />
+    <title>EzDocker — Containers</title>
+  </head>
+  <body>
+    <div id="app">
+      <main>
+        <header><a class="brand" href="#containers" aria-label="EzDocker início"><span class="brand-icon">▦</span> EzDocker<span class="brand-dot">.</span></a><span class="local-label"><i class="live-dot"></i> Docker Engine · Local</span></header>
+        <section class="page-heading"><div><span class="overline">SEU AMBIENTE, SOB CONTROLE</span><h1 id="page-title">Containers</h1><p id="page-description">Acompanhe seus serviços e gerencie cada execução.</p></div><button id="refresh" class="primary">↻ Atualizar</button></section>
+        <div id="notice" role="status" aria-live="polite" hidden></div>
+        <section id="view-containers" aria-labelledby="page-title">
+        <section class="stats" aria-label="Resumo"><article><span>Total de containers</span><strong id="total">—</strong><small>no seu Docker</small></article><article><span><i class="live-dot"></i> Em execução</span><strong id="running">—</strong><small>serviços ativos</small></article><article><span><i class="stopped-dot"></i> Parados</span><strong id="stopped">—</strong><small>prontos para iniciar</small></article></section>
+        <section class="container-panel"><div class="panel-toolbar"><h2>Seus containers <span id="result-count"></span></h2><input id="search" type="search" placeholder="Buscar nome ou imagem…" aria-label="Buscar containers" /></div><div class="table-scroll"><table><thead><tr><th>CONTAINER</th><th>IMAGEM</th><th>STATUS</th><th class="actions-heading">AÇÕES</th></tr></thead><tbody id="rows"></tbody></table></div><p id="empty" class="empty" role="status">Conectando ao Docker…</p><footer class="panel-footer"><span id="updated">Aguardando primeira consulta</span><span>Docker Engine API</span></footer></section>
+        <p class="page-note">As ações são executadas no Docker desta máquina.</p>
+        </section>
+        <section id="view-volumes" class="placeholder-panel" aria-labelledby="page-title" hidden><div class="placeholder-icon" id="volume-symbol"></div><span class="overline">EM BREVE</span><h2>Um lugar para seus dados</h2><p>A consulta de volumes ainda não está disponível. Esta área receberá a integração com os volumes do Docker.</p><a href="#containers" class="back-link">Voltar aos containers →</a></section>
+        <section id="view-logs" class="container-panel logs-page" aria-labelledby="page-title" hidden><div class="panel-toolbar"><h2>Logs simultâneos</h2><span class="overline" id="live-panel-count">0/3 aplicações</span></div><form id="page-logs-form"><label>Container<select id="log-container" required><option value="">Selecione um container</option></select></label><label>Últimas linhas<input id="page-tail" type="number" min="1" max="1000" value="100" required /></label><button id="add-log-panel" type="submit" class="primary">+ Acompanhar aplicação</button></form><p id="live-logs-empty" class="empty">Selecione até 3 aplicações para acompanhar os logs lado a lado.</p><div id="live-log-grid" class="live-log-grid" data-count="0"></div><footer class="panel-footer">Atualização automática a cada 2 segundos após cada consulta · Últimas 1–1000 linhas por aplicação</footer></section>
+      </main>
+      <nav class="floating-nav" aria-label="Navegação principal"><a href="#containers" data-view="containers" aria-current="page"><span data-nav-icon="containers"></span>Containers<span id="nav-count" class="nav-count">—</span></a><a href="#volumes" data-view="volumes"><span data-nav-icon="volumes"></span>Volumes</a><a href="#logs" data-view="logs"><span data-nav-icon="logs"></span>Logs</a></nav>
+    </div>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>
