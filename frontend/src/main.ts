@@ -1,4 +1,5 @@
 import './style.css';
+import { request } from './api-client';
 import { LogPoller } from './log-poller';
 
 type Container = { id: string; name: string; image: string; status: string };
@@ -34,20 +35,6 @@ let containers: Container[] = [];
 let loading = false;
 let loaded = false;
 let pending = new Set<string>();
-
-async function request<T>(path: string, method = 'GET', signal?: AbortSignal): Promise<T> {
-  let response: Response;
-  try {
-    response = await fetch(`/api${path}`, { method, signal: AbortSignal.any([AbortSignal.timeout(120000), ...(signal ? [signal] : [])]) });
-  } catch {
-    throw new Error('Não foi possível receber a resposta da API. Verifique o backend e consulte o estado antes de repetir uma ação.');
-  }
-  if (!response.ok) {
-    const error = await response.json().catch(() => null);
-    throw new Error(error?.message || `A API retornou erro ${response.status}.`);
-  }
-  return response.json() as Promise<T>;
-}
 
 function notice(message: string, error = false) {
   const box = element('notice');
