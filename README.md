@@ -4,6 +4,52 @@ Gerenciador local de Docker e containers em Python, com painel web independente.
 Sprint atual: **4 — Painel web**.
 O planejamento está em [SPRINTS.md](SPRINTS.md).
 
+## Manter rodando com Docker
+
+Requer Docker Engine/Desktop iniciado e Docker Compose. Não precisa instalar UV,
+Python, Node ou npm na máquina: as dependências são instaladas nas imagens.
+
+```bash
+docker compose up -d --build
+```
+
+Abra **http://localhost:18081**. O Compose inicia dois containers: Nginx serve o
+painel compilado e encaminha `/api` para o backend. Apenas o painel tem porta
+publicada, restrita a localhost. O backend acessa o socket do Docker da máquina,
+então pode ver e controlar seus outros containers. Esse acesso dá controle sobre
+o Docker; mantenha o painel local enquanto não houver autenticação.
+
+Os containers usam `restart: unless-stopped`: voltam quando o Docker reinicia,
+exceto se você os parar manualmente. Docker Desktop precisa estar iniciado para
+isso funcionar. A configuração limita o armazenamento dos logs do próprio
+EzDocker a três arquivos de 10 MB por serviço.
+
+```bash
+docker compose ps                 # situação dos serviços
+docker compose logs -f           # acompanhar o próprio EzDocker
+docker compose stop              # parar o painel e a API
+docker compose start             # voltar a executar
+docker compose up -d --build     # aplicar mudanças no código
+docker compose down              # remover somente os serviços e a rede do EzDocker
+```
+
+Para usar outra porta, copie `.env.example` para `.env` e ajuste `EZDOCKER_PORT`.
+Por exemplo, `EZDOCKER_PORT=18091` permite manter o desenvolvimento em 18081 e o
+painel Docker em **http://localhost:18091**. No Docker rootless, ajuste também
+`EZDOCKER_SOCKET`. Em WSL, mantenha a integração com Docker Desktop habilitada.
+O socket precisa existir; o Compose não cria uma pasta no lugar dele.
+
+Neste ambiente, `.env` já foi criado com `EZDOCKER_PORT=18091` porque a porta de
+desenvolvimento estava ocupada. A instância Docker foi iniciada e validada nessa
+porta. Esse arquivo não é versionado; uma instalação nova usa 18081 por padrão.
+
+O painel também lista seus próprios containers; parar o backend ou o frontend
+do EzDocker interrompe seu acesso ao painel. Use `docker compose start` para
+recuperar. Os painéis de logs selecionados ficam apenas no navegador e precisam
+ser adicionados novamente após recarregar a página.
+
+O build do backend segue a [integração oficial do UV com Docker](https://docs.astral.sh/uv/guides/integration/docker/).
+
 ## Rodar tudo com um comando
 
 Depois da instalação inicial das dependências (`uv sync --locked` e
@@ -14,7 +60,7 @@ Depois da instalação inicial das dependências (`uv sync --locked` e
 ```
 
 Inicia backend e frontend com recarregamento automático. Abra
-**http://127.0.0.1:5173**. Ctrl+C encerra os dois servidores. Se um servidor falhar
+**http://127.0.0.1:18081**. Ctrl+C encerra os dois servidores. Se um servidor falhar
 (por exemplo, porta ocupada), o outro é encerrado; não inicia cópias adicionais
 intencionalmente. Encerre servidores antigos antes de usar este comando.
 
@@ -78,7 +124,7 @@ um repositório separado. Usa TypeScript, Vite e CSS puro, sem framework de inte
 Em um terminal na raiz, inicie a API:
 
 ```bash
-./.tools/uv run uvicorn ezdocker.api:app --reload
+./.tools/uv run uvicorn ezdocker.api:app --reload --port 18080
 ```
 
 Em outro terminal:
@@ -89,7 +135,7 @@ npm ci
 npm run dev
 ```
 
-Abra **http://127.0.0.1:5173**. Requer Node.js 22.12+ e npm; se usa NVM, carregue
+Abra **http://127.0.0.1:18081**. Requer Node.js 22.12+ e npm; se usa NVM, carregue
 com `source ~/.nvm/nvm.sh`. O frontend usa o proxy local `/api`, sem exigir CORS
 no backend. A documentação do frontend descreve build e reverse proxy para deploy.
 
@@ -110,8 +156,8 @@ Código em `src/ezdocker`; testes em `tests`. Os testes de API usam
 ./.tools/uv run ezdocker serve
 ```
 
-Inicia em `http://127.0.0.1:8000`. Documentação interativa em
-`http://127.0.0.1:8000/docs`; contrato OpenAPI em `/openapi.json`.
+Inicia em `http://127.0.0.1:18080`. Documentação interativa em
+`http://127.0.0.1:18080/docs`; contrato OpenAPI em `/openapi.json`.
 Use Ctrl+C para encerrar.
 
 | Endpoint GET | Resposta de sucesso | Docker indisponível |

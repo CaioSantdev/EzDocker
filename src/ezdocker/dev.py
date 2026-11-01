@@ -52,7 +52,7 @@ def run_dev() -> int:
                     "--host",
                     "127.0.0.1",
                     "--port",
-                    "8000",
+                    "18080",
                 ],
                 cwd=root,
                 start_new_session=True,
@@ -66,7 +66,7 @@ def run_dev() -> int:
             )
         )
         print(
-            "\nEzDocker: http://127.0.0.1:5173 · API: http://127.0.0.1:8000/docs",
+            "\nEzDocker: http://127.0.0.1:18081 · API: http://127.0.0.1:18080/docs",
             flush=True,
         )
         print(

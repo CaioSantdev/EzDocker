@@ -23,7 +23,7 @@ def main() -> int:
     if args.command == "serve":
         import uvicorn
 
-        uvicorn.run("ezdocker.api:app", host="127.0.0.1", port=8000)
+        uvicorn.run("ezdocker.api:app", host="127.0.0.1", port=18080)
         return 0
     try:
         containers = list_containers()

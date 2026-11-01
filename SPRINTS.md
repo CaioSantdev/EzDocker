@@ -60,6 +60,12 @@ frontend com recarregamento automático e encerramento conjunto. Os 36 testes
 Python e quatro testes do frontend passaram; TypeScript, build e lint aprovados.
 Faltam validação visual integrada e revisão final da instalação em outra máquina.
 
+Docker Compose implementado com API Python/UV e frontend compilado servido por
+Nginx, reinício `unless-stopped`, healthchecks e rotação de logs. Build das duas
+imagens, healthchecks, página, favicon, proxy, conexão com Docker, listagem e logs
+validados. Instância local em segundo plano na porta 18091, configurada no `.env`
+ignorado pelo Git para coexistir com desenvolvimento em 18081.
+
 - Melhorar configuração, diagnóstico e documentação de instalação.
 - Executar validação integrada e revisar acesso exclusivamente local.
 - Registrar limitações e preparar versão inicial.

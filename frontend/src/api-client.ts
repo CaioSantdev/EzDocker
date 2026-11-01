@@ -13,9 +13,9 @@ export async function request<T>(path: string, method = 'GET', signal?: AbortSig
   const contentType = response.headers.get('content-type')?.split(';')[0].trim().toLowerCase() || '';
   if (contentType !== 'application/json' && !contentType.endsWith('+json')) {
     if (!response.ok) {
-      throw new Error(`A API está indisponível (HTTP ${response.status}). Verifique se o backend está rodando na porta 8000.`);
+      throw new Error(`A API está indisponível (HTTP ${response.status}). Verifique se o backend está rodando na porta 18080.`);
     }
-    throw new Error('O servidor retornou uma página HTML ou texto no lugar da API. Abra o painel em http://127.0.0.1:5173 e verifique o proxy /api para a porta 8000.');
+    throw new Error('O servidor retornou uma página HTML ou texto no lugar da API. Abra o painel em http://127.0.0.1:18081 e verifique o proxy /api para a porta 18080.');
   }
   let data;
   try { data = await response.json(); }

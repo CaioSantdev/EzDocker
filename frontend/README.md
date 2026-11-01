@@ -4,6 +4,10 @@ Aplicação independente em TypeScript, Vite e CSS puro. Sem framework de interf
 roteador ou biblioteca de componentes. Esta pasta pode virar um repositório próprio;
 não importa arquivos do backend nem exige Python para compilar.
 
+Também há um `Dockerfile` próprio: compila com Node e serve `dist/` com Nginx.
+O `nginx.conf` encaminha `/api` ao serviço `backend:18080` do Compose na raiz.
+Para executar o conjunto: `docker compose up -d --build` na raiz do projeto.
+
 ## Desenvolvimento
 
 Requer Node.js 22.12+ e npm (Node 24 LTS recomendado).
@@ -14,14 +18,14 @@ npm ci
 npm run dev
 ```
 
-Acesse http://127.0.0.1:5173. Em outro terminal, na raiz do backend:
+Acesse http://127.0.0.1:18081. Em outro terminal, na raiz do backend:
 
 ```bash
-./.tools/uv run uvicorn ezdocker.api:app --reload
+./.tools/uv run uvicorn ezdocker.api:app --reload --port 18080
 ```
 
 Se Node foi instalado com NVM, execute `source ~/.nvm/nvm.sh` antes dos comandos.
-O frontend usa `/api`; Vite encaminha para `http://127.0.0.1:8000`, retirando o
+O frontend usa `/api`; Vite encaminha para `http://127.0.0.1:18080`, retirando o
 prefixo. Para mudar o destino, copie `.env.example` para `.env.local` e ajuste
 `API_PROXY_TARGET`. Reinicie o Vite depois de alterar essa variável.
 
@@ -53,6 +57,8 @@ npm test
 npm run build
 npm run preview
 ```
+
+O preview do build usa `http://127.0.0.1:18082`.
 
 Publique `dist/` em servidor estático. No deploy, configure um reverse proxy na
 mesma origem que encaminhe `/api/*` ao backend, removendo `/api`. O proxy Vite é
